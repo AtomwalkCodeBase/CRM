@@ -57,13 +57,13 @@ const ProductSelectionModal = ({ visible, onClose, products }) => {
 
                     {/* Share Button */}
                     <View style={styles.footer}>
-                        <Text style={styles.instructionText}>
-                            Select the products and tap the share icon to send them via WhatsApp.
-                        </Text>
-                        <TouchableOpacity onPress={shareViaWhatsApp} style={styles.shareButton}>
+                      <TouchableOpacity onPress={shareViaWhatsApp} style={styles.shareButton}>
                             <Ionicons name="share-social" size={30} color="white" />
                             <Text style={styles.shareButtonText}>Share</Text>
                         </TouchableOpacity>
+                        <Text style={styles.instructionText}>
+                        Select one or multiple products and share the catalog via WhatsApp.
+                        </Text>
                     </View>
                 </View>
             </View>
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
         color: "#555",
         marginBottom: 10,
         textAlign: "center",
+        marginTop: 5,
     },
     shareButton: {
         flexDirection: "row",

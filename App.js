@@ -4,6 +4,7 @@ import { AuthProvider } from './src/context/AuthContext';
 import AuthScreen from './src/navigation/AuthScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text } from 'react-native';
+import NoInternetScreen from './src/screens/AuthScreen/NoInternetScreen';
 
 export default function App() {
   const [correctMPIN, setCorrectMPIN] = useState(null);
@@ -28,6 +29,7 @@ export default function App() {
     return (
       <AuthProvider>
         <MainContainer/>
+        <NoInternetScreen></NoInternetScreen>
       </AuthProvider>
     );
   }
@@ -35,6 +37,7 @@ export default function App() {
   return (
     <AuthProvider>
       {correctMPIN ? <AuthScreen />:<MainContainer />}
+      <NoInternetScreen></NoInternetScreen>
     </AuthProvider>
   );
 }

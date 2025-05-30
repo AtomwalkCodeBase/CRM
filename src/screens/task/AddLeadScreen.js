@@ -34,7 +34,7 @@ const AddLeadScreen = ({route, navigation}) => {
         "Enterprise", "Solution", "Consultants", "Pvt.Ltd.", "Pvt.Ltd", "Technology",
         "Inc.", "LLC", "Corp", "Limited", "Holdings", "Group", "Industries",
         "Associates", "Partners", "Services", "Co.", "S.A.", "PLC", "GmbH", "SARL",
-        "Company", "Incorporated", "Corporation", "Firm", "LLP", "AG", "Ltd.","Pvt","Ltd"
+        "Company", "Incorporated", "Corporation","Corporations", "Firm", "LLP", "AG", "Ltd.","Pvt","Ltd"
     ]; 
     const scan = route.params.scan;
     useEffect(()=>{
