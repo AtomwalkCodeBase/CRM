@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Animated, Easing } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Animated, Easing, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../context/AuthContext';
 import Header from '../components/Header';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../Styles/appStyle';
 
 const PinPassword = ({ navigation }) => {
   const [password, setPassword] = useState('');
@@ -53,61 +55,64 @@ const PinPassword = ({ navigation }) => {
   };
   useEffect(() => {
     const fetchUserPin = async () => {
-        const storedPin = await AsyncStorage.getItem('userPin');
-        setUserPin(storedPin); // storedPin will be `null` if no value is found
+      const storedPin = await AsyncStorage.getItem('userPin');
+      setUserPin(storedPin); // storedPin will be `null` if no value is found
     };
     fetchUserPin();
-}, []);
-const onBackPressed = () => {
-  navigation.pop();
-}
+  }, []);
+  const onBackPressed = () => {
+    navigation.pop();
+  }
   return (
-    <>
-    <Header 
-            label={userPin?"Update Your PIN":"Set Your PIN"}
-            image=''
-            icon='arrow-left'
-            onPress={onBackPressed}   
-      /> 
-    <View style={styles.container}>
-            
-      <Text style={styles.title}>{userPin?"Update Your PIN":"Set Your PIN"}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-        placeholderTextColor="#888"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Your 4-Digit PIN"
-        keyboardType="numeric"
-        maxLength={4}
-        value={pin}
-        onChangeText={setPin}
-        secureTextEntry
-        placeholderTextColor="#888"
-      />
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Confirm PIN"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        placeholderTextColor="#888"
-      />
-      {errorMessage ? (
-        <Animated.Text style={[styles.error, { transform: [{ translateX: shakeAnim }] }]}>
-          {errorMessage}
-        </Animated.Text>
-      ) : null}
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitText}>Submit</Text>
-      </TouchableOpacity>
-    </View>
-    </>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#4285f4' }} edges={['top', 'left', 'right']}>
+      <StatusBar barStyle="light-content" backgroundColor="#4285f4" />
+      <View style={{ flex: 1, backgroundColor: colors.white }}>
+        <Header
+          label={userPin ? "Update Your PIN" : "Set Your PIN"}
+          image=''
+          icon='arrow-left'
+          onPress={onBackPressed}
+        />
+        <View style={styles.container}>
+
+          <Text style={styles.title}>{userPin ? "Update Your PIN" : "Set Your PIN"}</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+            placeholderTextColor="#888"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Your 4-Digit PIN"
+            keyboardType="numeric"
+            maxLength={4}
+            value={pin}
+            onChangeText={setPin}
+            secureTextEntry
+            placeholderTextColor="#888"
+          />
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            placeholder="Confirm PIN"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            placeholderTextColor="#888"
+          />
+          {errorMessage ? (
+            <Animated.Text style={[styles.error, { transform: [{ translateX: shakeAnim }] }]}>
+              {errorMessage}
+            </Animated.Text>
+          ) : null}
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <Text style={styles.submitText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

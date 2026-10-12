@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import MainContainer from '../navigation/MainContainer';
+// import MainContainer from '../navigation/MainContainer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     View,
@@ -17,15 +17,15 @@ import PinPassword from '../screens/AuthScreen/PinPassword';
 import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/Loader';
 const AuthScreen = () => {
-    const { login, isLoading,setIsLoading } = useContext(AuthContext);
+    const { login, isLoading, setIsLoading } = useContext(AuthContext);
     const [mPIN, setMPIN] = useState(['', '', '', '']);
     const [attemptsRemaining, setAttemptsRemaining] = useState(5);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    // const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const openpupop=()=>{
+    const openpupop = () => {
         setModalVisible(true)
     }
-    
+
     const maxAttempts = 5;
 
     const inputRefs = Array(4)
@@ -46,20 +46,20 @@ const AuthScreen = () => {
             inputRefs[index - 1].current.focus();
         }
     };
-    useEffect(()=>{
+    useEffect(() => {
         handleBiometricAuthentication()
-    },[])
+    }, [])
     const handleMPINSubmit = async () => {
         const correctMPIN = await AsyncStorage.getItem('userPin');
         const finalUsername = await AsyncStorage.getItem('username');
         const userPassword = await AsyncStorage.getItem('Password');
         if (mPIN.join('') === correctMPIN) {
-            setIsAuthenticated(true);
+            // setIsAuthenticated(true);
             await login(finalUsername, userPassword);
         } else {
             const remaining = attemptsRemaining - 1;
             setAttemptsRemaining(remaining);
-            
+
             if (remaining > 0) {
                 Alert.alert('Incorrect mPIN', `${remaining} attempts remaining`);
             } else {
@@ -67,11 +67,26 @@ const AuthScreen = () => {
             }
         }
     };
+
     const handleBiometricAuthentication = async () => {
-        setIsLoading(true);
-        const finalUsername = await AsyncStorage.getItem('username');
-        const userPassword = await AsyncStorage.getItem('Password');
         try {
+            const hasHardware = await LocalAuthentication.hasHardwareAsync();
+            if (!hasHardware) {
+                Alert.alert('Biometric Unavailable', 'This device does not support biometric authentication. Please use your mPIN.');
+                return;
+            }
+
+            const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+            if (!isEnrolled) {
+                Alert.alert('Biometric Not Set Up', 'No fingerprint or face authentication is enrolled on this device. Please use your mPIN.');
+                return;
+            }
+
+            setIsLoading(true);
+
+            const finalUsername = await AsyncStorage.getItem('username');
+            const userPassword = await AsyncStorage.getItem('Password');
+
             const biometricAuth = await LocalAuthentication.authenticateAsync({
                 promptMessage: 'Authenticate using biometrics',
                 fallbackLabel: 'Enter mPIN',
@@ -79,22 +94,24 @@ const AuthScreen = () => {
 
             if (biometricAuth.success) {
                 await login(finalUsername, userPassword);
-                setIsAuthenticated(true);
-            } 
-        } catch (err) {
-            console.error(err);
+            }
+
+        } catch (error) {
+            console.log('Biometric authentication error:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    if (isAuthenticated) {
-        setIsLoading(false);
-        return <MainContainer />;
-    }
+    // if (isAuthenticated) {
+    //     setIsLoading(false);
+    //     return <MainContainer />;
+    // }
 
     return (
         <ImageBackground
-        source={require('../../assets/images/Backgroundback.png')} // Example background image URL
-        style={styles.background}
+            source={require('../../assets/images/Backgroundback.png')} // Example background image URL
+            style={styles.background}
         >
             <Loader visible={isLoading} />
             <View style={styles.overlay}>
@@ -124,7 +141,7 @@ const AuthScreen = () => {
                     >
                         <Text style={styles.submitButtonText}>Submit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity  onPress={openpupop}>
+                    <TouchableOpacity onPress={openpupop}>
                         <Text style={styles.forgotText}>Forgot PIN?</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -145,7 +162,7 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
         resizeMode: 'cover',
-        zIndex:1,
+        zIndex: 1,
     },
     overlay: {
         flex: 1,

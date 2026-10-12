@@ -1,12 +1,13 @@
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  Dimensions, 
-  Image, 
-  StatusBar, 
-  ScrollView, 
-  TouchableOpacity 
+
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  StatusBar,
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
@@ -54,8 +55,8 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.welcomeText}>Welcome to Atomwalk Office</Text>
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false} 
-        showsHorizontalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}>
           <View style={styles.listContainer}>
             <TouchableOpacity
               style={[styles.listItem, { backgroundColor: '#e1e5fc' }]}
@@ -89,7 +90,7 @@ const HomeScreen = ({ navigation }) => {
               onPress={() => navigation.navigate('AddNewLead', { task: null, scan: true })}
             >
               <View style={styles.iconBackground}>
-                <AntDesign name="scan1" size={24} color="#fff" />
+                <AntDesign name="scan" size={24} color="#fff" />
               </View>
               <Text style={styles.listText}>Scan Lead</Text>
             </TouchableOpacity>
@@ -105,15 +106,15 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
             )}
             {isManagers && (
-            <TouchableOpacity
-              style={[styles.listItem, { backgroundColor: '#e1e5fc' }]}
-              onPress={() => navigation.navigate('ProductCatalog')}
-            >
-              <View style={styles.iconBackground}>
-                <Entypo name="shop" size={30} color="#fff" />
-              </View>
-              <Text style={styles.listText}>Product Catalogue</Text>
-            </TouchableOpacity>)}
+              <TouchableOpacity
+                style={[styles.listItem, { backgroundColor: '#e1e5fc' }]}
+                onPress={() => navigation.navigate('ProductCatalog')}
+              >
+                <View style={styles.iconBackground}>
+                  <Entypo name="shop" size={30} color="#fff" />
+                </View>
+                <Text style={styles.listText}>Product Catalogue</Text>
+              </TouchableOpacity>)}
             <TouchableOpacity
               style={[styles.listItem, { backgroundColor: '#e1e5fc' }]}
               onPress={() => navigation.navigate('Company')}
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    
+
   },
   header: {
     backgroundColor: '#4285f4',

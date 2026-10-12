@@ -1,14 +1,14 @@
-import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
-import React, {useContext, useState, useEffect} from 'react'
-import CustomButton from '../components/CustomButton';
+import { View, Text, ScrollView, Image, StatusBar } from 'react-native'
+import React, { useContext, useState, useEffect } from 'react'
 import { AuthContext } from '../context/AuthContext';
-import Header from '../components/Header'; 
+import Header from '../components/Header';
 import Loader from '../components/Loader';
 import { colors } from '../Styles/appStyle'
 import { getProfileInfo } from '../services/authServices';
-import { MaterialIcons,MaterialCommunityIcons ,Ionicons,Octicons  } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons, Ionicons, Octicons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const Container = styled.View`
   flex: 1;
   background-color: #fff;
@@ -96,81 +96,84 @@ const LogoutButtonText = styled.Text`
   margin-left: 10px;
 `;
 const ProfileScreen = ({ navigation }) => {
-    const {logout, userToken} = useContext(AuthContext);
-    const [loading, setLoading] = useState(false);
-    const [profile, setProfile] = useState([])
-    const [isManager, setIsManager] = useState(false)
-    const [userPin, setUserPin] = useState(null);
-    // console.log("data--->",profile)
+  const { logout, userToken } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState([])
+  const [isManager, setIsManager] = useState(false)
+  const [userPin, setUserPin] = useState(null);
+  // console.log("data--->",profile)
 
-    useEffect(() => {
-      setLoading(true)
-      getProfileInfo()
+  useEffect(() => {
+    setLoading(true)
+    getProfileInfo()
       .then((res) => {
-          // console.log(res.data)
-          setProfile(res.data);
-          setIsManager(res.data.user_group.is_manager);
-          setLoading(false);
+        // console.log(res.data)
+        setProfile(res.data);
+        setIsManager(res.data.user_group.is_manager);
+        setLoading(false);
       })
       .catch((error) => {
-          // console.log('error', error);
-          setLoading(false);
-          setIsManager(false);
+        // console.log('error', error);
+        setLoading(false);
+        setIsManager(false);
       });
-    }, []);
-    useEffect(() => {
-      const fetchUserPin = async () => {
-          const storedPin = await AsyncStorage.getItem('userPin');
-          setUserPin(storedPin); // storedPin will be `null` if no value is found
-      };
-      fetchUserPin();
+  }, []);
+  useEffect(() => {
+    const fetchUserPin = async () => {
+      const storedPin = await AsyncStorage.getItem('userPin');
+      setUserPin(storedPin); // storedPin will be `null` if no value is found
+    };
+    fetchUserPin();
   }, []);
 
   return (
-    <SafeAreaView style={{backgroundColor: colors.white, flex: 1}}>
-      <Loader visible={loading} /> 
-      <Header 
-            label='My Profile'
-            image=''
-            icon=''
-            color={colors.blue}
-            onPress={()=>{}}
-      /> 
-      <ScrollView contentContainerStyle={{paddingTop: 10, paddingHorizontal: 10}}>
-        <Container>
-        <ProfileHeader>
-          <ProfileImage source={{ uri: profile.image }} />
-          <UserName>{profile.user_name}</UserName>
-          <Designation>Total task : {profile.total_task||"NA"}</Designation>
-          <EditProfileButton  onPress={() => navigation.navigate("ChangePassword")} >
-            <EditProfileButtonText>{userPin?"Update Your PIN":"Set Your PIN"}</EditProfileButtonText>
-          </EditProfileButton>
-        </ProfileHeader>
-        <View style={{flexDirection: 'row', paddingHorizontal:10}}>  
-      <Text style={{color: "#333", fontSize: 20, fontWeight: 'bold', flex: 1, paddingVertical: 0, alignSelf:'flex-start'}}>Is Manager : </Text>
-      {isManager ? <MaterialIcons name='check-box' size={30} color={"#007bff"}  />: 
-                   <MaterialIcons name='cancel' size={30} color={colors.red} />}
-      </View> 
-        <ProfileOptions>
-          <Option>
-            <Ionicons name="person-outline" size={20} color="#666" />
-            <OptionText>Employee ID : {profile?.emp_data?.emp_id}</OptionText>
-          </Option>
-          <Option>
-          <MaterialCommunityIcons name="office-building" size={20} color="#666" />
-            <OptionText>Department : {profile?.emp_data?.department_name}</OptionText>
-          </Option>
-          {profile.mobile_number&&<Option>
-          <Octicons name="device-mobile" size={20} color="#666" />
-            <OptionText>Mobile Number : {profile.mobile_number}</OptionText>
-          </Option>}
-          </ProfileOptions>
-          <LogoutButton  onPress={() => {logout()}}>
-          <Ionicons name="log-out-outline" size={20} color="#ff6347" />
-          <LogoutButtonText>Log out</LogoutButtonText>
-        </LogoutButton>
-        </Container>
-      </ScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#4285f4' }} edges={['top', 'left', 'right']}>
+      <StatusBar barStyle="light-content" backgroundColor="#4285f4" />
+      <View style={{ flex: 1, backgroundColor: colors.white }}>
+        <Loader visible={loading} />
+        <Header
+          label='My Profile'
+          image=''
+          icon=''
+          color={colors.blue}
+          onPress={() => { }}
+        />
+        <ScrollView contentContainerStyle={{ paddingTop: 10, paddingHorizontal: 10 }}>
+          <Container>
+            <ProfileHeader>
+              <ProfileImage source={{ uri: profile.image }} />
+              <UserName>{profile.user_name}</UserName>
+              <Designation>Total task : {profile.total_task || "NA"}</Designation>
+              <EditProfileButton onPress={() => navigation.navigate("ChangePassword")} >
+                <EditProfileButtonText>{userPin ? "Update Your PIN" : "Set Your PIN"}</EditProfileButtonText>
+              </EditProfileButton>
+            </ProfileHeader>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 10 }}>
+              <Text style={{ color: "#333", fontSize: 20, fontWeight: 'bold', flex: 1, paddingVertical: 0, alignSelf: 'flex-start' }}>Is Manager : </Text>
+              {isManager ? <MaterialIcons name='check-box' size={30} color={"#007bff"} /> :
+                <MaterialIcons name='cancel' size={30} color={colors.red} />}
+            </View>
+            <ProfileOptions>
+              <Option>
+                <Ionicons name="person-outline" size={20} color="#666" />
+                <OptionText>Employee ID : {profile?.emp_data?.emp_id}</OptionText>
+              </Option>
+              <Option>
+                <MaterialCommunityIcons name="office-building" size={20} color="#666" />
+                <OptionText>Department : {profile?.emp_data?.department_name}</OptionText>
+              </Option>
+              {profile.mobile_number && <Option>
+                <Octicons name="device-mobile" size={20} color="#666" />
+                <OptionText>Mobile Number : {profile.mobile_number}</OptionText>
+              </Option>}
+            </ProfileOptions>
+            <LogoutButton onPress={() => { logout() }}>
+              <Ionicons name="log-out-outline" size={20} color="#ff6347" />
+              <LogoutButtonText>Log out</LogoutButtonText>
+            </LogoutButton>
+          </Container>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }

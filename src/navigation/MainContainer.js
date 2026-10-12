@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,39 +21,38 @@ const todoName = "Todo";
 const Tab = createBottomTabNavigator();
 
 const MainContainer = () => {
-    const {isLoading, userToken, error} = useContext(AuthContext);
-    console.log('Main container', userToken)
+  const { isLoading, userToken, error } = useContext(AuthContext);
 
-  if (isLoading){
-    return(
-      <View style={{flex:1, justifyContent:'center', alignItems: 'center'}}>
-          <ActivityIndicator size={'large'} />
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size={'large'} />
       </View>
     );
   }
-  if (error){
+  if (error) {
     ToastMsg(error, '', 'error');
   }
 
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName= {userToken? {homeName} : {loginName}}
+        initialRouteName={userToken ? { homeName } : { loginName }}
         screenOptions={({ route }) => ({
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'grey',
-          unmountOnBlur:true,
-          headerShown: false,  
+          unmountOnBlur: true,
+          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             let rn = route.name;
 
             if (rn === homeName) {
-              iconName = focused ? 'home' : 'home-outline';  
+              iconName = focused ? 'home' : 'home-outline';
 
             } else if (rn === taskName) {
               iconName = focused ? 'list' : 'list-outline';
-            }else if (rn === mtaskName) {
+            } else if (rn === mtaskName) {
               iconName = focused ? 'create-outline' : 'create-outline';
             } else if (rn === todoName) {
               iconName = focused ? 'bulb-outline' : 'bulb-outline';
@@ -68,23 +67,23 @@ const MainContainer = () => {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-                    
+
         })}
-        >
-        
-        { userToken ? (
-            <>
+      >
+
+        {userToken ? (
+          <>
             <Tab.Screen name={homeName} component={HomeStackScreen} />
             <Tab.Screen name={taskName} component={TaskStackScreen} />
             <Tab.Screen name={mtaskName} component={MTaskStackScreen} />
             <Tab.Screen name={todoName} component={TodoStackScreen} />
             <Tab.Screen name={profileName} component={ProfileStackScreen} />
-            </>
-            
-          ): 
-          ( <>
+          </>
+
+        ) :
+          (<>
             <Tab.Screen name={loginName} component={LoginScreen} />
-            </>
+          </>
           )
         }
       </Tab.Navigator>

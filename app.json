@@ -2,15 +2,10 @@
   "expo": {
     "name": "Atomwalk CRM",
     "slug": "atomwalk_crm",
-    "version": "1.0.16",
+    "version": "1.0.17",
     "orientation": "portrait",
     "icon": "./assets/images/adaptive-icon.png",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#FFFFFF"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -22,7 +17,7 @@
     },
     "android": {
       "package": "com.atomwalk.crm",
-      "versionCode": 16,
+      "versionCode": 17,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -40,6 +35,31 @@
       "eas": {
         "projectId": "afccbf63-3a58-4826-9e39-8471bd0be584"
       }
-    }
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#FFFFFF"
+        }
+      ],
+      [
+  "expo-image-picker",
+  {
+    "cameraPermission": "Allow Atomwalk CRM to use your camera to scan visiting cards.",
+    "photosPermission": "Allow Atomwalk CRM to access your photos.",
+    "microphonePermission": false
+  }
+],
+[
+  "expo-location",
+  {
+    "locationWhenInUsePermission": "Allow Atomwalk CRM to use your location while using the app."
+  }
+]
+    ]
   }
 }
